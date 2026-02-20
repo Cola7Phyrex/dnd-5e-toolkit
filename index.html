@@ -481,5 +481,19 @@
     <script src="./js/dice.js"></script>
     <script src="./js/character.js"></script>
     <script src="./js/diy.js"></script>
+        <!-- 注册 Service Worker（离线支持） -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then((reg) => {
+                    console.log('Service Worker 注册成功:', reg);
+                })
+                .catch((err) => {
+                    console.log('Service Worker 注册失败:', err);
+                });
+        }
+    </script>
+</body>
+</html>
 </body>
 </html>
