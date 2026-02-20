@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DND 5E 跑团工具箱</title>
+    <!-- 引入Google Fonts：Cinzel用于英文标题，Noto Serif SC用于中文 -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+        <!-- 图片导出库 html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+        <!-- PWA 配置 -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#8B4513">
+    
+    <!-- iPhone 专用配置 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DND工具箱">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%238B4513' width='192' height='192' rx='20'/%3E%3Ctext x='96' y='120' font-size='100' text-anchor='middle' fill='%23FDF6E3'%3E🎲%3C/text%3E%3C/svg%3E">
+    
+    <!-- 禁止缩放（App-like 体验） -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="main-nav">
+        <div class="nav-brand">
+            <span class="dice-icon">🎲</span>
+            <h1>DND 5E 工具箱</h1>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-btn active" onclick="switchTab('dice')">
+                <span class="icon">🎲</span>
+                <span class="label">骰子</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('character')">
+                <span class="icon">⚔️</span>
+                <span class="label">角色卡</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('diy')">
+                <span class="icon">🔨</span>
+                <span class="label">DIY</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        
+        <!-- 板块1：骰子工具 -->
+        <section id="dice-section" class="tab-content active">
+            <div class="section-header">
+                <h2>互动骰子</h2>
+                <p class="subtitle">点击添加骰子，最多6个</p>
+            </div>
+            
+            <!-- 骰子选择栏（固定在底部） -->
+            <div class="dice-selector">
+                <div class="selector-label">添加骰子：</div>
+                <div class="dice-buttons">
+                    <button class="dice-add-btn" onclick="diceModule.addDice(4)" title="d4">d4</button>
+                    <button class="dice-add-btn" onclick="diceModule.addDice(6)" title="d6">d6</button>
+                    <button class="dice-add-btn" onclick="diceModule.addDice(8)" title="d8">d8</button>
+                    <button class="dice-add-btn" onclick="diceModule.addDice(10)" title="d10">d10</button>
+                    <button class="dice-add-btn" onclick="diceModule.addDice(12)" title="d12">d12</button>
+                    <button class="dice-add-btn" onclick="diceModule.addDice(20)" title="d20">d20</button>
+                    <button class="dice-add-btn" onclick="diceModule.addDice(100)" title="d100">d100</button>
+                </div>
+            </div>
+
+            <!-- 骰子展示区域 -->
+            <div class="dice-arena" id="dice-arena">
+                <!-- 动态生成的骰子会放在这里 -->
+                <div class="empty-state" id="dice-empty">
+                    <div class="empty-icon">🎲</div>
+                    <p>点击下方按钮添加骰子</p>
+                </div>
+            </div>
+
+            <!-- 控制按钮 -->
+            <div class="dice-controls">
+                <button class="btn btn-primary btn-large" onclick="diceModule.rollAll()">
+                    <span class="btn-icon">🎲</span>
+                    Roll！
+                </button>
+                <button class="btn btn-secondary" onclick="diceModule.clearUnfrozen()">
+                    移除未冻结
+                </button>
+                <button class="btn btn-danger" onclick="diceModule.clearAll()">
+                    全部清除
+                </button>
+            </div>
+
+            <!-- 结果展示 -->
+            <div class="roll-result" id="roll-result" style="display: none;">
+                <div class="result-label">总计：</div>
+                <div class="result-value" id="result-value">0</div>
+                <div class="result-detail" id="result-detail"></div>
+            </div>
+        </section>
+
+        <!-- 板块2：角色卡（先占位，后续实现） -->
+               <!-- 板块2：角色卡 -->
+        <section id="character-section" class="tab-content">
+            <!-- 列表视图 -->
+            <div id="character-list-view">
+                <div class="section-header">
+                    <h2>角色卡管理</h2>
+                    <button class="btn btn-primary" onclick="characterModule.showCreateForm()">
+                        <span class="btn-icon">+</span> 新建角色卡
+                    </button>
+                </div>
+                <div class="character-list" id="character-list-container">
+                    <div class="empty-state">
+                        <div class="empty-icon">⚔️</div>
+                        <p>暂无角色卡，点击上方按钮创建</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 创建/编辑表单视图（默认隐藏） -->
+            <div id="character-form-view" style="display: none;">
+                <div class="form-header">
+                    <button class="btn btn-secondary" onclick="characterModule.backToList()">
+                        ← 返回列表
+                    </button>
+                    <h2 id="form-title">创建角色卡</h2>
+                    <div style="width: 80px;"></div> <!-- 占位保持居中 -->
+                </div>
+
+                <form id="character-form" class="character-form" onsubmit="event.preventDefault(); characterModule.saveCharacter();">
+                    <input type="hidden" id="char-id" value="">
+                    
+                    <!-- 基础信息 -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">基础信息</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>角色姓名 <span class="required">*</span></label>
+                                <input type="text" id="char-name" required placeholder="例如：艾尔文·星辉">
+                            </div>
+                            <div class="form-group">
+                                <label>玩家姓名</label>
+                                <input type="text" id="char-player" placeholder="你的名字">
+                            </div>
+                            <div class="form-group">
+                                <label>阵营</label>
+                                <select id="char-alignment">
+                                    <option value="">请选择</option>
+                                    <option value="守序善良">守序善良</option>
+                                    <option value="中立善良">中立善良</option>
+                                    <option value="混乱善良">混乱善良</option>
+                                    <option value="守序中立">守序中立</option>
+                                    <option value="绝对中立">绝对中立</option>
+                                    <option value="混乱中立">混乱中立</option>
+                                    <option value="守序邪恶">守序邪恶</option>
+                                    <option value="中立邪恶">中立邪恶</option>
+                                    <option value="混乱邪恶">混乱邪恶</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>背景</label>
+                                <input type="text" id="char-background" placeholder="例如：贵族、士兵、罪犯">
+                            </div>
+                        </div>
+                    </div>
+
+                                        <!-- 职业与种族（带自定义Fallback） -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">职业与等级</h3>
+                        
+                        <!-- 主职业 -->
+                        <div class="form-grid">
+                            <div class="form-group wide">
+                                <label>主职业 <span class="required">*</span></label>
+                                <div class="select-with-custom">
+                                    <select id="char-class-select" onchange="characterModule.handleClassChange()">
+                                        <option value="custom">✏️ 自定义输入</option>
+                                    </select>
+                                    <input type="text" id="char-class-custom" class="custom-input" placeholder="输入自定义职业" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>子职业/范型</label>
+                                <input type="text" id="char-subclass" placeholder="例如：防护学派">
+                            </div>
+                            <div class="form-group">
+                                <label>等级 <span class="required">*</span></label>
+                                <input type="number" id="char-level" min="1" max="20" value="1" required onchange="characterModule.updateProficiency()">
+                            </div>
+                        </div>
+
+                        <!-- 兼职职业区域 -->
+                        <div id="multiclass-container" class="multiclass-area">
+                            <!-- 动态添加的兼职会放在这里 -->
+                        </div>
+
+                        <button type="button" class="btn btn-secondary btn-small" onclick="characterModule.addMulticlass()" style="margin-top: 10px;">
+                            + 添加兼职职业
+                        </button>
+
+                        <!-- 种族选择 -->
+                        <div class="form-grid" style="margin-top: 20px;">
+                            <div class="form-group wide">
+                                <label>种族</label>
+                                <div class="select-with-custom">
+                                    <select id="char-race-select" onchange="characterModule.handleRaceChange()">
+                                        <option value="custom">✏️ 自定义输入</option>
+                                    </select>
+                                    <input type="text" id="char-race-custom" class="custom-input" placeholder="输入自定义种族" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>总等级</label>
+                                <div id="total-level-display" style="font-size: 1.2rem; font-weight: 700; color: var(--brown-primary); padding: 8px;">1</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 核心属性 -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">核心属性</h3>
+                        <div class="ability-grid">
+                            <div class="ability-box">
+                                <label class="ability-name">力量 STR</label>
+                                <input type="number" class="ability-score" id="attr-str" value="10" min="1" max="30" onchange="characterModule.calcModifier('str')">
+                                <div class="ability-modifier" id="mod-str">+0</div>
+                                <label class="save-proficiency">
+                                    <input type="checkbox" id="save-str"> 豁免
+                                </label>
+                            </div>
+                            <div class="ability-box">
+                                <label class="ability-name">敏捷 DEX</label>
+                                <input type="number" class="ability-score" id="attr-dex" value="10" min="1" max="30" onchange="characterModule.calcModifier('dex')">
+                                <div class="ability-modifier" id="mod-dex">+0</div>
+                                <label class="save-proficiency">
+                                    <input type="checkbox" id="save-dex"> 豁免
+                                </label>
+                            </div>
+                            <div class="ability-box">
+                                <label class="ability-name">体质 CON</label>
+                                <input type="number" class="ability-score" id="attr-con" value="10" min="1" max="30" onchange="characterModule.calcModifier('con')">
+                                <div class="ability-modifier" id="mod-con">+0</div>
+                                <label class="save-proficiency">
+                                    <input type="checkbox" id="save-con"> 豁免
+                                </label>
+                            </div>
+                            <div class="ability-box">
+                                <label class="ability-name">智力 INT</label>
+                                <input type="number" class="ability-score" id="attr-int" value="10" min="1" max="30" onchange="characterModule.calcModifier('int')">
+                                <div class="ability-modifier" id="mod-int">+0</div>
+                                <label class="save-proficiency">
+                                    <input type="checkbox" id="save-int"> 豁免
+                                </label>
+                            </div>
+                            <div class="ability-box">
+                                <label class="ability-name">感知 WIS</label>
+                                <input type="number" class="ability-score" id="attr-wis" value="10" min="1" max="30" onchange="characterModule.calcModifier('wis')">
+                                <div class="ability-modifier" id="mod-wis">+0</div>
+                                <label class="save-proficiency">
+                                    <input type="checkbox" id="save-wis"> 豁免
+                                </label>
+                            </div>
+                            <div class="ability-box">
+                                <label class="ability-name">魅力 CHA</label>
+                                <input type="number" class="ability-score" id="attr-cha" value="10" min="1" max="30" onchange="characterModule.calcModifier('cha')">
+                                <div class="ability-modifier" id="mod-cha">+0</div>
+                                <label class="save-proficiency">
+                                    <input type="checkbox" id="save-cha"> 豁免
+                                </label>
+                            </div>
+                        </div>
+                        <div class="proficiency-bonus">
+                            熟练加值：<span id="prof-bonus">+2</span>
+                        </div>
+                    </div>
+
+                    <!-- 战斗数据 -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">战斗数据</h3>
+                        <div class="combat-stats">
+                            <div class="combat-box">
+                                <label>最大生命值 HP</label>
+                                <input type="number" id="char-hp-max" value="10" min="1">
+                            </div>
+                            <div class="combat-box">
+                                <label>当前生命值</label>
+                                <input type="number" id="char-hp-current" value="10" min="0">
+                            </div>
+                            <div class="combat-box">
+                                <label>护甲等级 AC</label>
+                                <input type="number" id="char-ac" value="10" min="1">
+                            </div>
+                            <div class="combat-box">
+                                <label>先攻加值</label>
+                                <input type="number" id="char-initiative" value="0">
+                            </div>
+                            <div class="combat-box">
+                                <label>移动速度</label>
+                                <input type="text" id="char-speed" value="30尺">
+                            </div>
+                            <div class="combat-box">
+                                <label>命中骰</label>
+                                <input type="text" id="char-hit-dice" placeholder="例如：1d8">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 技能熟练（简化版，先提供常用技能） -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">技能熟练</h3>
+                        <div class="skills-grid" id="skills-container">
+                            <!-- JS动态生成技能列表 -->
+                        </div>
+                    </div>
+
+                    <!-- 法术（简化版，纯文本输入，后续升级） -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">法术与能力</h3>
+                        <div class="form-group">
+                            <label>已知法术（按环位列出，用逗号分隔）</label>
+                            <div class="spell-slots">
+                                <div class="spell-level">
+                                    <label>戏法</label>
+                                    <textarea id="spells-0" rows="2" placeholder="例如：法师之手、光亮术"></textarea>
+                                </div>
+                                <div class="spell-level">
+                                    <label>1环法术位数量</label>
+                                    <input type="number" id="spell-slots-1" value="0" min="0">
+                                    <textarea id="spells-1" rows="2" placeholder="1环法术，逗号分隔"></textarea>
+                                </div>
+                                <div class="spell-level">
+                                    <label>2环法术位数量</label>
+                                    <input type="number" id="spell-slots-2" value="0" min="0">
+                                    <textarea id="spells-2" rows="2" placeholder="2环法术"></textarea>
+                                </div>
+                                <div class="spell-level">
+                                    <label>3环+法术（自行记录）</label>
+                                    <textarea id="spells-high" rows="3" placeholder="3环及以上法术，格式：3环-火球术, 闪电束"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 物品与特性 -->
+                    <div class="form-section">
+                        <h3 class="form-section-title">装备与特性</h3>
+                        <div class="form-group">
+                            <label>持有物品</label>
+                            <textarea id="char-inventory" rows="4" placeholder="例如：&#10;- 长剑 x1&#10;- 治疗药水 x2&#10;- 金币 50gp"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>职业特性</label>
+                            <textarea id="char-features" rows="4" placeholder="记录你的职业能力..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>种族特性</label>
+                            <textarea id="char-racial-traits" rows="3" placeholder="记录种族特性..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>角色背景故事</label>
+                            <textarea id="char-backstory" rows="5" placeholder="你的角色背景、性格、理想、羁绊..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 按钮组 -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="characterModule.backToList()">取消</button>
+                        <button type="submit" class="btn btn-primary btn-large">保存角色卡</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 详情视图（默认隐藏） -->
+            <div id="character-detail-view" style="display: none;">
+                <div class="form-header">
+                    <button class="btn btn-secondary" onclick="characterModule.backToList()">← 返回</button>
+                    <h2 id="detail-name">角色名</h2>
+                                    <div class="detail-actions">
+                    <button class="btn btn-secondary" onclick="characterModule.exportText()">
+                        📄 导出文字
+                    </button>
+                    <button class="btn btn-secondary" onclick="characterModule.exportImage()">
+                        🖼️ 导出图片
+                    </button>
+                    <button class="btn btn-primary" onclick="characterModule.editCurrent()">编辑</button>
+                    <button class="btn btn-danger" onclick="characterModule.deleteCurrent()">删除</button>
+                </div>
+                </div>
+                <div class="character-sheet" id="character-sheet-content">
+                    <!-- 动态生成角色卡展示 -->
+                </div>
+            </div>
+        </section>
+
+                <!-- 板块3：DIY资料库 -->
+        <section id="diy-section" class="tab-content">
+            <!-- DIY导航标签 -->
+            <div class="diy-nav">
+                <button class="diy-nav-btn active" onclick="diyModule.switchTab('items')">
+                    <span>🎒</span> 物品
+                </button>
+                <button class="diy-nav-btn" onclick="diyModule.switchTab('spells')">
+                    <span>✨</span> 法术
+                </button>
+                <button class="diy-nav-btn" onclick="diyModule.switchTab('monsters')">
+                    <span>👹</span> 怪物
+                </button>
+            </div>
+
+            <!-- 物品DIY -->
+            <div id="diy-items" class="diy-panel active">
+                <div class="diy-header">
+                    <h3>自定义物品</h3>
+                    <button class="btn btn-primary" onclick="diyModule.showForm('items')">+ 新建物品</button>
+                </div>
+                <div class="diy-list" id="items-list">
+                    <div class="empty-state">
+                        <div class="empty-icon">🎒</div>
+                        <p>暂无自定义物品</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 法术DIY -->
+            <div id="diy-spells" class="diy-panel">
+                <div class="diy-header">
+                    <h3>自定义法术</h3>
+                    <button class="btn btn-primary" onclick="diyModule.showForm('spells')">+ 新建法术</button>
+                </div>
+                <div class="diy-list" id="spells-list">
+                    <div class="empty-state">
+                        <div class="empty-icon">✨</div>
+                        <p>暂无自定义法术</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 怪物DIY -->
+            <div id="diy-monsters" class="diy-panel">
+                <div class="diy-header">
+                    <h3>自定义怪物</h3>
+                    <button class="btn btn-primary" onclick="diyModule.showForm('monsters')">+ 新建怪物</button>
+                </div>
+                <div class="diy-list" id="monsters-list">
+                    <div class="empty-state">
+                        <div class="empty-icon">👹</div>
+                        <p>暂无自定义怪物</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 通用表单模态框（默认隐藏） -->
+            <div id="diy-modal" class="diy-modal" style="display: none;">
+                <div class="diy-modal-content">
+                    <div class="diy-modal-header">
+                        <h3 id="diy-form-title">新建</h3>
+                        <button class="btn-close" onclick="diyModule.closeForm()">×</button>
+                    </div>
+                    <form id="diy-form" onsubmit="event.preventDefault(); diyModule.saveData();">
+                        <input type="hidden" id="diy-type" value="">
+                        <input type="hidden" id="diy-id" value="">
+                        
+                        <!-- 动态表单内容 -->
+                        <div id="diy-form-fields"></div>
+                        
+                        <div class="diy-form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="diyModule.closeForm()">取消</button>
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 引入JS文件（按顺序：先工具，后功能） -->
+    <script src="./js/app.js"></script>
+    <script src="./js/dice.js"></script>
+    <script src="./js/character.js"></script>
+    <script src="./js/diy.js"></script>
+</body>
+</html>
