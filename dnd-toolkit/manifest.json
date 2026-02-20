@@ -1,0 +1,17 @@
+{
+  "name": "DND 5E 跑团工具箱",
+  "short_name": "DND工具箱",
+  "description": "DND 5E 骰子、角色卡、DIY资料库",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FDF6E3",
+  "theme_color": "#8B4513",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%238B4513' width='192' height='192' rx='20'/%3E%3Ctext x='96' y='120' font-size='100' text-anchor='middle' fill='%23FDF6E3'%3E🎲%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

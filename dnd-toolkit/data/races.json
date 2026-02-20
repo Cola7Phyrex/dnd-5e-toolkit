@@ -1,0 +1,210 @@
+{
+  "version": "1.0",
+  "races": [
+    {
+      "id": "dragonborn",
+      "name": "龙裔 (Dragonborn)",
+      "speed": 30,
+      "size": "Medium",
+      "abilityScoreIncrease": {"str": 2, "cha": 1},
+      "traits": {
+        "龙族血统 (Draconic Ancestry)": "选择一种龙族血统决定伤害类型",
+        "吐息武器 (Breath Weapon)": "根据龙族血统造成范围伤害",
+        "伤害抗性 (Damage Resistance)": "与龙族血统相同类型的伤害抗性"
+      },
+      "languages": ["Common", "Draconic"]
+    },
+    {
+      "id": "dwarf",
+      "name": "矮人 (Dwarf)",
+      "speed": 25,
+      "size": "Medium",
+      "abilityScoreIncrease": {"con": 2},
+      "traits": {
+        "黑暗视觉 (Darkvision)": "60尺黑暗视觉",
+        "矮人韧性 (Dwarven Resilience)": "毒素伤害抗性，对抗毒素豁免优势",
+        "石中精妙 (Stonecunning)": "历史检定针对石质建筑时双倍熟练加值"
+      },
+      "languages": ["Common", "Dwarvish"],
+      "subraces": [
+        {
+          "name": "丘陵矮人 (Hill Dwarf)",
+          "abilityScoreIncrease": {"wis": 1},
+          "traits": {
+            "矮人韧性 (Dwarven Toughness)": "生命值最大值+1，每级额外+1"
+          }
+        },
+        {
+          "name": "山地矮人 (Mountain Dwarf)",
+          "abilityScoreIncrease": {"str": 2},
+          "traits": {
+            "护甲训练 (Armor Training)": "轻甲、中甲熟练"
+          }
+        }
+      ]
+    },
+    {
+      "id": "elf",
+      "name": "精灵 (Elf)",
+      "speed": 30,
+      "size": "Medium",
+      "abilityScoreIncrease": {"dex": 2},
+      "traits": {
+        "黑暗视觉 (Darkvision)": "60尺黑暗视觉",
+        "敏锐感官 (Keen Senses)": "察觉技能熟练",
+        "精类血统 (Fey Ancestry)": "对魅惑免疫，魔法无法让你睡眠",
+        "出神 (Trance)": "不需要睡眠，冥想4小时即可"
+      },
+      "languages": ["Common", "Elvish"],
+      "subraces": [
+        {
+          "name": "高等精灵 (High Elf)",
+          "abilityScoreIncrease": {"int": 1},
+          "traits": {
+            "精灵武器训练": "长剑、短剑、短弓、长弓熟练",
+            "戏法": "知晓一个法师戏法，智力为施法关键属性",
+            "额外语言": "一门额外语言"
+          }
+        },
+        {
+          "name": "木精灵 (Wood Elf)",
+          "abilityScoreIncrease": {"wis": 1},
+          "traits": {
+            "精灵武器训练": "长剑、短剑、短弓、长弓熟练",
+            "轻捷步伐 (Fleet of Foot)": "基础步行速度35尺",
+            "野性面具 (Mask of the Wild)": "在轻度遮蔽时可以进行躲藏"
+          }
+        },
+        {
+          "name": "卓尔 (Drow)",
+          "abilityScoreIncrease": {"cha": 1},
+          "traits": {
+            "高级黑暗视觉 (Superior Darkvision)": "120尺黑暗视觉",
+            "日光敏感 (Sunlight Sensitivity)": "日光下攻击和感知检定劣势",
+            "卓尔魔法 (Drow Magic)": "知晓舞光术，3级时知晓妖火，5级时知晓黑暗术"
+          }
+        }
+      ]
+    },
+    {
+      "id": "gnome",
+      "name": "侏儒 (Gnome)",
+      "speed": 25,
+      "size": "Small",
+      "abilityScoreIncrease": {"int": 2},
+      "traits": {
+        "黑暗视觉 (Darkvision)": "60尺黑暗视觉",
+        "侏儒狡黠 (Gnome Cunning)": "对抗魔法时智力、感知、魅力豁免优势"
+      },
+      "languages": ["Common", "Gnomish"],
+      "subraces": [
+        {
+          "name": "森林侏儒 (Forest Gnome)",
+          "abilityScoreIncrease": {"dex": 1},
+          "traits": {
+            "自然幻术师 (Natural Illusionist)": "知晓次级幻影戏法",
+            "与小型野兽交谈 (Speak with Small Beasts)": "通过声音和手势与小型野兽简单交流"
+          }
+        },
+        {
+          "name": "岩侏儒 (Rock Gnome)",
+          "abilityScoreIncrease": {"con": 1},
+          "traits": {
+            "工匠学识 (Artificer's Lore)": "魔法、炼金或科技物品的历史检定双倍熟练",
+            "修补匠 (Tinker)": "可以制作微型发条装置"
+          }
+        }
+      ]
+    },
+    {
+      "id": "half-elf",
+      "name": "半精灵 (Half-Elf)",
+      "speed": 30,
+      "size": "Medium",
+      "abilityScoreIncrease": {"cha": 2, "choice": 2},
+      "traits": {
+        "黑暗视觉 (Darkvision)": "60尺黑暗视觉",
+        "精类血统 (Fey Ancestry)": "对魅惑免疫，魔法无法让你睡眠",
+        "多才多艺 (Skill Versatility)": "两项技能熟练"
+      },
+      "languages": ["Common", "Elvish", "choice"]
+    },
+    {
+      "id": "half-orc",
+      "name": "半兽人 (Half-Orc)",
+      "speed": 30,
+      "size": "Medium",
+      "abilityScoreIncrease": {"str": 2, "con": 1},
+      "traits": {
+        "黑暗视觉 (Darkvision)": "60尺黑暗视觉",
+        "不屈 (Relentless Endurance)": "生命值降至0但未直接杀死时，改为降至1（长休恢复）",
+        "凶恶攻击 (Savage Attacks)": "近战武器暴击时，额外增加一个伤害骰"
+      },
+      "languages": ["Common", "Orc"]
+    },
+    {
+      "id": "halfling",
+      "name": "半身人 (Halfling)",
+      "speed": 25,
+      "size": "Small",
+      "abilityScoreIncrease": {"dex": 2},
+      "traits": {
+        "幸运 (Lucky)": "骰出攻击、检定或豁免的1时，可以重骰",
+        "勇敢 (Brave)": "恐慌豁免优势",
+        "半身人灵巧 (Halfling Nimbleness)": "穿越任何生物空间时不受额外移动代价"
+      },
+      "languages": ["Common", "Halfling"],
+      "subraces": [
+        {
+          "name": "轻足半身人 (Lightfoot Halfling)",
+          "abilityScoreIncrease": {"cha": 1},
+          "traits": {
+            "天生善言 (Naturally Stealthy)": "即使被生物遮住也可以进行躲藏"
+          }
+        },
+        {
+          "name": "强心半身人 (Stout Halfling)",
+          "abilityScoreIncrease": {"con": 1},
+          "traits": {
+            "强心韧性 (Stout Resilience)": "毒素伤害抗性，对抗毒素豁免优势"
+          }
+        }
+      ]
+    },
+    {
+      "id": "human",
+      "name": "人类 (Human)",
+      "speed": 30,
+      "size": "Medium",
+      "abilityScoreIncrease": {"all": 1},
+      "traits": {
+        "额外语言": "一门额外语言"
+      },
+      "languages": ["Common", "choice"],
+      "variants": [
+        {
+          "name": "变体人类 (Variant Human)",
+          "abilityScoreIncrease": {"choice": 2},
+          "traits": {
+            "技能": "一项技能熟练",
+            "专长": "一个自选专长",
+            "语言": "一门额外语言"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tiefling",
+      "name": "提夫林 (Tiefling)",
+      "speed": 30,
+      "size": "Medium",
+      "abilityScoreIncrease": {"int": 1, "cha": 2},
+      "traits": {
+        "黑暗视觉 (Darkvision)": "60尺黑暗视觉",
+        "火焰抗性 (Hellish Resistance)": "火焰伤害抗性",
+        "炼狱诅咒 (Infernal Legacy)": "知晓奇术戏法，3级时知晓炼狱叱喝，5级时知晓黑暗术"
+      },
+      "languages": ["Common", "Infernal"]
+    }
+  ]
+}
